@@ -1,81 +1,106 @@
 // Soldier
 class Soldier {
-    constructor(health, strength) {
-        this.health = health; 
-        this.strength = strength;
-    }
-     attack(){
-        return this.strength;
-}
-    receiveDamage(damage) {
-        this.health -= damage;
-    }
+  constructor(health, strength) {
+    this.health = health;
+    this.strength = strength;
+  }
+  attack() {
+    return this.strength;
+  }
+  receiveDamage(damage) {
+    this.health -= damage;
+  }
 }
 
 // Viking
 class Viking extends Soldier {
-    constructor(name, health, strength) {
-        super(health, strength); // go over this again
-        this.name = name; 
+  constructor(name, health, strength) {
+    super(health, strength);
+    this.name = name;
+  }
+  receiveDamage(damage) {
+    this.health -= damage;
+    if (this.health > 0) {
+      return `${this.name} has received ${damage} points of damage`;
+    } else {
+      return `${this.name} has died in act of combat`;
     }
-    attack(){ // is this right? How should I properly inherit it?
-        return this.strength;
-    }
-    receiveDamage(damage) {
-        this.health -= damage;
-        if (this.health > 0) {
-            return `${this.name} has received ${damage} points of damage`;
-        } else {
-            return `${this.name} has died in the act of combat`;
-        }
-    }
-    battleCry() {
-        return `Odin Owns You All!`;
-    }
-}    
+  }
+  battleCry() {
+    return 'Odin Owns You All!';
+  }
+}
 
 // Saxon
 class Saxon extends Soldier {
-    attack() { // is this right? How should I properly inherit it?
-        return this.strength;
+  receiveDamage(damage) {
+    this.health -= damage;
+    if (this.health > 0) {
+      return `A Saxon has received ${damage} points of damage`;
+    } else {
+      return `A Saxon has died in combat`;
     }
-    receiveDamage(damage) {
-        this.health -= damage;
-        if (this.health > 0) {
-            return `A saxon has received ${damage} points of damage`;
-        } else {
-            return `A saxon has died in combat`;
-        }
-    }
+  }
 }
 
 // War
 class War {
-    constructor () {
-        this.vikingArmy = [];
-        this.saxonArmy = [];
-    }
-    addViking(Viking) {
-        this.vikingArmy.push(Viking);
-    }
-    addSaxon(Saxon){
-        this.saxonArmy.push(Saxon);
-    }
-    vikingAttack(){
-       let randomSaxon = Math.floor(Math.random() * this.saxonArmy.length);
-       let randomViking = Math.floor(Math.random() * this.vikingArmy.length);
-       return `${randomSaxon}.receiveDamage() = ${randomViking}.this.strength`;
-    }
-    saxonAttack(){
+  constructor() {
+    this.vikingArmy = [];
+    this.saxonArmy = [];
+  }
+  addViking(Viking) {
+    this.vikingArmy.push(Viking);
+  }
+  addSaxon(Saxon) {
+    this.saxonArmy.push(Saxon);
+  }
+  vikingAttack() {
+    const randomViking = this.vikingArmy[
+      Math.floor(Math.random() * this.vikingArmy.length)
+    ];
+    const randomSaxon = this.saxonArmy[
+      Math.floor(Math.random() * this.saxonArmy.length)
+    ];
+    let result = randomSaxon.receiveDamage(randomViking.strength);
 
+    if (randomSaxon.health <= 0) {
+      this.saxonArmy.pop(randomSaxon);
     }
-    showStatus(){
-        if (this.saxonArmy.length === 0) {
-            return `Vikings have won the war of the century!`;
-        } else if (this.vikingArmy.length === 0) {
-            return `Saxons have fought for their lives and survived another day...`;
-        } else {
-            return `Vikings and Saxons are still in the thick of battle.`;
-        }
+    return result;
+  }
+  saxonAttack() {
+    const randomViking = this.vikingArmy[
+      Math.floor(Math.random() * this.vikingArmy.length)
+    ];
+    const randomSaxon = this.saxonArmy[
+      Math.floor(Math.random() * this.saxonArmy.length)
+    ];
+    let result = randomViking.receiveDamage(randomSaxon.strength);
+
+    if (randomViking.health <= 0) {
+      this.vikingArmy.pop(randomViking);
     }
+    return result;
+  }
+  armyAttack(soldierType) {
+    // combined Saxon and Vking Attack methods for cleaner code
+    const randomViking = this.vikingArmy[
+      Math.floor(Math.random() * this.vikingArmy.length)
+    ];
+    const randomSaxon = this.saxonArmy[
+      Math.floor(Math.random() * this.saxonArmy.length)
+    ];
+
+    let result = soldierType.receiveDamage(!soldierType.strength);
+  }
+  showStatus() {
+    if (this.saxonArmy.length <= 0) {
+      return `Vikings have won the war of the century!`;
+    } else if (this.vikingArmy.length <= 0) {
+      return `Saxons have fought for their lives and survived another day...`;
+    } else {
+      return `Vikings and Saxons are still in the thick of battle.`;
+    }
+  }
 }

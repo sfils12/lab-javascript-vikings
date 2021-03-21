@@ -83,17 +83,7 @@ class War {
     }
     return result;
   }
-  armyAttack(soldierType) {
-    // combined Saxon and Vking Attack methods for cleaner code
-    const randomViking = this.vikingArmy[
-      Math.floor(Math.random() * this.vikingArmy.length)
-    ];
-    const randomSaxon = this.saxonArmy[
-      Math.floor(Math.random() * this.saxonArmy.length)
-    ];
 
-    let result = soldierType.receiveDamage(!soldierType.strength);
-  }
   showStatus() {
     if (this.saxonArmy.length <= 0) {
       return `Vikings have won the war of the century!`;
@@ -104,3 +94,4 @@ class War {
     }
   }
 }
+
